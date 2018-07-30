@@ -1,18 +1,18 @@
 {
-  "name": "directly-training-project",
+  "name": "feature-redux-saga",
   "version": "0.1.0",
   "description": "React+Redux",
-  "homepage": "https://github.com/makingsensetraining/DirectlyTraining",
+  "homepage": "https://github.com/makingsensetraining/feature-redux-saga",
   "keywords": [
     "react",
     "redux"
   ],
   "bugs": {
-    "url": "https://github.com/makingsensetraining/DirectlyTraining/issues"
+    "url": "https://github.com/makingsensetraining/feature-redux-saga/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/makingsensetraining/DirectlyTraining.git"
+    "url": "git+https://github.com/makingsensetraining/feature-redux-saga.git"
   },
   "author": "Making Sense",
   "license": "MIT",

@@ -23,5 +23,7 @@ module.exports = {
       theme: 'darkTheme',
       sort: 'status'
     }]
-  ]
+  ],
+  setupTestFrameworkScriptFile: './enzyme.js',
+  testURL: 'http://localhost/',
 };
