@@ -1,60 +1,57 @@
-# Feature Redux Saga
+# Replacing Redux Thunk with Sagas
 
-# Back end deployment to Heroku
-Create a [Heroku](https://www.heroku.com) account.
+The goal of this Spike is to continue using Redux but with the Sagas middleware instead of the current Thunk implementation, In order to take advantage of its more effective side-effects management.
 
-Install [Heroku-Cli](https://devcenter.heroku.com/articles/heroku-cli#download-and-install), follow the instructions to install and create a heroku app for your development there
-EG
+# What are Sagas
 
-`$ heroku create ms-lab-tests`
+Sagas are a design pattern for distributed transactions, a saga manages processes that need to be executed in a transactional way, maintaining the state of the execution and compensating failed processes.
+
+Redux Sagas allows you to intercept Redux Actions and perform modify your data or trigger additional queries using Side-Effects.
+
+# Why Using Sagas
+
+- It uses ES6 generators which makes asynchronous flow easier to write and - understand.
+- It is a more efficient alternative to redux thunk callbacks style.
+- It is easier to test with little to no mocking.
+
+# How it works
+
+A Redux Saga is implemented as a middleware in order to coordinate and trigger Async actions or Side-Effects, it accomplishes this by using ES6 generators.
+
+# Generators
+
+Generators are functions that can be paused and resumed, instead of executing all the statements of the function at once.
+
+A basic generator
+```javascript
+function* myGenerator() {
+    const first = yield 'first yield value';
+    const second = yield 'second yield value';
+    return 'third returned value';
+}
+```
 
 
-**DON'T PUSH TO HEROKU YET**
+When you invoke a generator function, it will return an Iterator object. With each call of the Iterator’s next() method, the generator’s body will be executed until the next yield statement and then pause.
 
-Install your own Databse plugin:
+```javascript
+const it = myGenerator();
+console.log(it.next()); // { value: 'first yield value', done: false }
+console.log(it.next()); // { value: second yield value', done: false }
+console.log(it.next()); // { value: undefined, done: true}
+```
 
-`$ heroku addons:create jawsdb:kitefin`
+This can make async code easier to write and reason about. For instance, instead of doing the following
 
-Get DB credentials:
+```javascript
+fetch(url).then(value => {
+    console.log(value);
+});
+```
 
-`$ heroku config:get JAWSDB_URL`
+With generators, we could do the following
 
-It will return somethin like:
-
-`mysql://gr6fbtjxjq59el9d:fefkz3p13ufsa759@g8mh6ge01lu2z3n1.cbetxkdyhwsb.us-east-1.rds.amazonaws.com:3306/hm4stiy5qmvd73y6`
-
-Where 
-
-- Username: gr6fbtjxjq59el9d
-- Password: fefkz3p13ufsa759
-- Host: g8mh6ge01lu2z3n1.cbetxkdyhwsb.us-east-1.rds.amazonaws.com
-- Port: 3306
-- Database: hm4stiy5qmvd73y6
-
-Use this credentials into your .env.development file.
-
-Get the app url
-
-`$ heroku info -s | grep web_url | cut -d= -f2`
-
-Change the DEFAULT_BASE_URL constant in webapp/constants.js file to target your app url
-
-`export const DEFAULT_BASE_URL = 'https://ms-lab-tests.herokuapp.com/';`
-
-Set `NODE_ENV` to development:
-
-`heroku config:set NODE_ENV=development`
-
-Work as usual, commit to git as usual, when you are done with your changes enter the following command from the root of the project:
-
-`$ git subtree push --prefix server heroku master`
-
-With this you will push your branch to Heroku but only the server folder. 
-
->For now don't commit this **.env.development** or **constants.js** file changes
-
-If you need to work with the current **ms-labs-be** app request access to
-
-[Mariano Ravinale](mailto:mravinale@makingsense.com)
-
-[Emanuel Pereyra](mailto:epereyra@makingsense.com)
+```javascript
+const value = yield fetch(url);
+console.log(value);
+```
